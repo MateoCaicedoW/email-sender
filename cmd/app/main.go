@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/MateoCaicedoW/email-sender/internal"
+	"github.com/MateoCaicedoW/email-sender/internal/app/config"
 	"github.com/leapkit/core/envor"
 	"github.com/leapkit/core/server"
 )
@@ -15,6 +16,14 @@ func main() {
 		server.WithHost(envor.Get("HOST", "127.0.0.1")),
 		server.WithPort(envor.Get("PORT", "3000")),
 	)
+
+	if config.IsProduction() {
+		s = server.New(
+			server.WithHost(envor.Get("HOST", "0.0.0.0")),
+			server.WithPort(envor.Get("PORT", "3000")),
+		)
+	}
+
 	if err := internal.AddServices(s); err != nil {
 		os.Exit(1)
 	}
