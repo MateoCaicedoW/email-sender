@@ -1,7 +1,6 @@
-{{define "main"}}
-<div class="max-w-md mx-auto p-8 bg-gray-800 rounded-md shadow-md form-container">
+<div class="max-w-md mx-auto p-8 bg-[#31363F] rounded-md shadow-md form-container">
     <h2 class="text-2xl font-semibold text-white mb-6">Say Something!</h2>
-    <form action="/send" method="POST" enctype="multipart/form-data">
+    <form action="/send_email" method="POST" enctype="multipart/form-data">
     <div class="mb-4">
         <label for="name" class="block text-gray-300 text-sm font-bold mb-2">Sender Name</label>
         <input type="text" id="name" name="name" placeholder="John Doe" required
@@ -24,10 +23,9 @@
     </div>
 
     <button type="submit"
-        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue">
+        class="bg-[#76ABAE] text-white px-4 py-2 rounded-md hover:bg-[#76ABAE]/50 focus:outline-none focus:shadow-outline-blue">
         Send Message
     </button>
     
     </form>
 </div>
-{{end}}

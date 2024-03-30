@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"time"
+
+	"github.com/leapkit/core/db"
+	"github.com/leapkit/core/db/migrations"
 )
 
 func main() {
 	usage := func() {
-		fmt.Println("Usage: gen migration <name>")
+		fmt.Println("Usage: gen <generator_name>")
 		fmt.Println("Available generators:")
 		fmt.Println("  -  migration")
 	}
@@ -22,25 +24,21 @@ func main() {
 
 	switch os.Args[1] {
 	case "migration":
+		err := db.GenerateMigration(
+			os.Args[2], // name of the migration
 
-		migrationName := fmt.Sprintf("%s_%s.sql", os.Args[2], time.Now().Format("20060102150405"))
-		fmt.Println("Generating migration", migrationName)
+			// This is the path to the migrations folder
+			migrations.UseMigrationFolder(filepath.Join("internal", "migrations")),
+		)
 
-		filepath := filepath.Join("db/migrations", migrationName)
-
-		file, err := os.Create(filepath)
 		if err != nil {
-			fmt.Println("Error creating migration file:", err)
+			fmt.Println(err)
+
 			return
 		}
-
-		defer file.Close()
-
-		file.WriteString("-- +migrate Up\n\n\n-- +migrate Down\n\n")
-
-		fmt.Println("Migration generated successfully")
-		return
 	default:
+		fmt.Printf("Unknown generator `%v`.\n\n", os.Args[1])
+
 		usage()
 	}
 
