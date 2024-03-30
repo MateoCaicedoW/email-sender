@@ -3,13 +3,10 @@ package main
 import (
 	"os"
 	"os/exec"
-
-	"github.com/MateoCaicedoW/email-sender/internal"
-	"github.com/paganotoni/tailo"
 )
 
 func main() {
-	tailo.Build(internal.TailoOptions...)
+	// tailo.Build(internal.TailoOptions...)
 
 	cmd := exec.Command("go", "build")
 	cmd.Args = append(
