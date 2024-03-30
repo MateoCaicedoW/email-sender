@@ -11,7 +11,7 @@ import (
 
 	"github.com/paganotoni/tailo"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
 var (
@@ -43,9 +43,9 @@ var (
 	}
 
 	// DatabaseURL to connect and interact with our database instance.
-	DatabaseURL = envor.Get("DATABASE_URL", "leapkit.db")
+	DatabaseURL = envor.Get("DATABASE_URL", "postgres://postgres:postgres@localhost:5432/email_sender?sslmode=disable")
 	// DB is the database connection builder function
 	// that will be used by the application based on the driver and
 	// connection string.
-	DB = db.ConnectionFn(DatabaseURL, db.WithDriver("sqlite3"))
+	DB = db.ConnectionFn(DatabaseURL)
 )
