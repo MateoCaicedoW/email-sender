@@ -1,0 +1,7 @@
+<div id="modal" class="absolute top-0 modal-container z-50 w-full h-full flex flex-col justify-center items-center" x-data="{show: true}" @keydown.escape.window="show = false" x-show="show">
+    <div  @click.outside="show = false">
+        <div id="modal-content" class="rounded-md p-5 rounded-xl bg-[#222831] max-w-5xl m-auto" style="width: 400px;">
+            <%= yield %>
+        </div>
+    </div>
+</div>

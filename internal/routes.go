@@ -1,8 +1,10 @@
 package internal
 
 import (
+	"github.com/MateoCaicedoW/email-sender/internal/app/helpers"
 	"github.com/MateoCaicedoW/email-sender/internal/email"
 	"github.com/MateoCaicedoW/email-sender/internal/home"
+	"github.com/MateoCaicedoW/email-sender/internal/subscribers"
 	"github.com/leapkit/core/envor"
 	"github.com/leapkit/core/render"
 	"github.com/leapkit/core/server"
@@ -24,15 +26,18 @@ func AddRoutes(r server.Router) error {
 		render.TemplateFS(tmpls, "internal"),
 
 		render.WithDefaultLayout("layout.html"),
-		render.WithHelpers(render.AllHelpers),
-		render.WithHelpers(map[string]any{
-			"assetPath": Assets.PathFor,
-		}),
+		render.WithHelpers(helpers.All),
 	))
 
+	r.HandleFunc("GET /emails", home.Index)
 	r.HandleFunc("GET /{$}", home.Index)
 	r.HandleFunc("POST /send_email", email.Send)
 	r.HandleFunc("GET /show_email", email.Show)
+
+	r.Group("/subscribers/", func(r server.Router) {
+		r.HandleFunc("GET /{$}", subscribers.List)
+		r.HandleFunc("GET /new", subscribers.New)
+	})
 
 	// Mounting the assets manager at the end of the routes
 	// so that it can serve the public assets.

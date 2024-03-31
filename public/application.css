@@ -1,0 +1,4 @@
+.modal-container {
+    background: rgba(52, 64, 84, 0.70) !important;
+    backdrop-filter: blur(8px);
+}

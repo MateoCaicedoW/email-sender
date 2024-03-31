@@ -7,15 +7,47 @@
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/public/application.css">
+    <script src="https://unpkg.com/alpinejs" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
 </head>
 <body class="h-full flex flex-row min-h-full relative bg-[#222831]">
-    <section class="flex flex-col gap-4 min-h-full w-full" >
-        <main class=" min-h-full p-8 py-10 flex flex-col gap-5" x-data="">
-            <%= yield %>
-        </main>
-    </section>
+    <div class="flex w-full">
+        <div>
+            <nav  class="h-full">
+                <aside class="w-[250px] border-r border-r-[#31363F] h-full py-5 px-3 flex flex-col justify-between">
+                    <div>
+                        <h2>
+                            <a href="/" class="text-lg font-semibold text-[#EEEEEE] px-2">Sender</a>
+                        </h2>
+                    </div>
+                    <div class="flex-1 mt-8">
+                        <div class="flex flex-col gap-2">
+                            <a href="/emails" class="text-[#EEEEEE]/75 h-8 px-2 rounded-lg hover:bg-[#31363F] flex items-center text-sm <%= activeClass("emails.*", currentURL) %> [&.active]:bg-[#31363F]">Emails</a>
+                            <a href="/subscribers" class="text-[#EEEEEE]/75 h-8 px-2 rounded-lg hover:bg-[#31363F] flex items-center text-sm <%= activeClass("subscribers.*", currentURL) %> [&.active]:bg-[#31363F]">Subscribers</a>
+                        </div>
+                    </div>
+
+                    <a class="text-[#EEEEEE]/75">
+                        Mateo Caicedo
+                    </a>
+                </aside>
+            </nav>
+        </div>
+
+        <div class="w-full">
+            <header class="h-[60px]  border-b border-b-[#31363F]">
+
+            </header>
+
+            <section class="flex flex-col gap-4 w-full" >
+                <main class=" min-h-full p-8 flex flex-col gap-5" x-data="">
+                    <%= yield %>
+                </main>
+            </section>
+        </div>
+    </div>
 </body>
 </html>
