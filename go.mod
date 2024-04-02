@@ -10,7 +10,14 @@ require (
 )
 
 require (
+	github.com/gofrs/uuid v4.4.0+incompatible // indirect
+	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e // indirect
+)
+
+require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/go-playground/form/v4 v4.2.1 // indirect
+	github.com/gobuffalo/validate v2.0.4+incompatible
 	github.com/gofrs/uuid/v5 v5.0.0 // indirect
 	github.com/gorilla/securecookie v1.1.1 // indirect
 	github.com/gorilla/sessions v1.2.1 // indirect

@@ -1,4 +1,23 @@
-.modal-container {
-    background: rgba(52, 64, 84, 0.70) !important;
+.modal-container, .swal2-container {
+    background: rgb(0 0 0 / 70%) !important;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
+}
+
+.swal2-popup {
+    background-color: #222831;
+}
+
+.swal2-title, .swal2-html-container{
+    color: #EEEEEE !important;
+}
+
+.swal2-html-container{
+    font-size: 15px !important;
+}
+
+.swal2-actions{
+    width: 85%;
+    display: flex;
+    gap: 12px;
 }

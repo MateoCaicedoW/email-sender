@@ -8,8 +8,10 @@
     <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/public/application.css">
+    <script src="/public/application.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
 </head>
@@ -49,5 +51,9 @@
             </section>
         </div>
     </div>
+
+    <%= contentOf("modal") {%>
+        <div id="modal"></div>
+    <%} %>
 </body>
 </html>

@@ -37,6 +37,11 @@ func AddRoutes(r server.Router) error {
 	r.Group("/subscribers/", func(r server.Router) {
 		r.HandleFunc("GET /{$}", subscribers.List)
 		r.HandleFunc("GET /new", subscribers.New)
+		r.HandleFunc("POST /{$}", subscribers.Create)
+		r.HandleFunc("GET /{id}/edit", subscribers.Edit)
+		r.HandleFunc("PUT /{id}", subscribers.Update)
+		r.HandleFunc("DELETE /{id}", subscribers.Delete)
+		r.HandleFunc("GET /indicators", subscribers.Indicators)
 	})
 
 	// Mounting the assets manager at the end of the routes
