@@ -21,3 +21,12 @@
     display: flex;
     gap: 12px;
 }
+
+
+.htmx-request.indicator {
+    display: block !important;
+}
+
+.indicator {
+    display: none !important;
+}

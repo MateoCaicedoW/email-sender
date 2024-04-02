@@ -164,3 +164,14 @@ func (s *service) InactiveCount() (int, error) {
 
 	return count, nil
 }
+
+func (s *service) All() (models.Subscribers, error) {
+	query := `SELECT * FROM subs`
+	var subs models.Subscribers
+	err := s.db.Select(&subs, query)
+	if err != nil {
+		return nil, err
+	}
+
+	return subs, nil
+}

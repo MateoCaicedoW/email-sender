@@ -2,7 +2,7 @@ package internal
 
 import (
 	"github.com/MateoCaicedoW/email-sender/internal/app/helpers"
-	"github.com/MateoCaicedoW/email-sender/internal/email"
+	"github.com/MateoCaicedoW/email-sender/internal/emails"
 	"github.com/MateoCaicedoW/email-sender/internal/home"
 	"github.com/MateoCaicedoW/email-sender/internal/subscribers"
 	"github.com/leapkit/core/envor"
@@ -29,10 +29,15 @@ func AddRoutes(r server.Router) error {
 		render.WithHelpers(helpers.All),
 	))
 
-	r.HandleFunc("GET /emails", home.Index)
 	r.HandleFunc("GET /{$}", home.Index)
-	r.HandleFunc("POST /send_email", email.Send)
-	r.HandleFunc("GET /show_email", email.Show)
+	// r.HandleFunc("POST /send_email", emails.Send)
+	// r.HandleFunc("GET /show_email", emails.Show)
+
+	r.Group("/emails/", func(r server.Router) {
+		r.HandleFunc("GET /{$}", emails.List)
+		r.HandleFunc("POST /send", emails.Send)
+
+	})
 
 	r.Group("/subscribers/", func(r server.Router) {
 		r.HandleFunc("GET /{$}", subscribers.List)

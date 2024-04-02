@@ -3,7 +3,7 @@ package internal
 import (
 	myServer "github.com/MateoCaicedoW/GO-SMTP/server"
 	"github.com/MateoCaicedoW/email-sender/internal/app/config"
-	"github.com/MateoCaicedoW/email-sender/internal/email"
+	"github.com/MateoCaicedoW/email-sender/internal/emails"
 	"github.com/MateoCaicedoW/email-sender/internal/subscribers"
 	"github.com/leapkit/core/server"
 )
@@ -15,7 +15,7 @@ func AddServices(r server.Router) error {
 		return err
 	}
 
-	r.Use(server.InCtxMiddleware("mailerService", email.NewService(s)))
+	r.Use(server.InCtxMiddleware("mailerService", emails.NewService(s)))
 	r.Use(server.InCtxMiddleware("subscriberService", subscribers.NewService(conn)))
 
 	return nil

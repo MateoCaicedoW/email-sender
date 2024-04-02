@@ -31,4 +31,5 @@ type SubscriberService interface {
 	Delete(id uuid.UUID) error
 	ActiveCount() (int, error)
 	InactiveCount() (int, error)
+	All() (Subscribers, error)
 }

@@ -25,8 +25,8 @@
     </div>
 
     <div class="grid grid-cols-5 gap-2 pt-5">
-        <input type="text" value="<%= term %>" hx-get="/subscribers" hx-include="this, [name='status']" hx-trigger="keyup changed delay:200ms" hx-target="#table" hx-swap="outerHTML" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-3" placeholder="Search" name="term">
-        <select name="status" id="" hx-get="/subscribers" hx-include="this, [name='term']" hx-trigger="change" hx-target="#table" hx-swap="outerHTML"  class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-2">
+        <input type="text" value="<%= term %>" hx-get="/subscribers" hx-include="this, [name='status']" hx-trigger="keyup changed delay:200ms" hx-target="#table" hx-swap="outerHTML" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1 col-start-4" placeholder="Search..." name="term">
+        <select name="status" id="" hx-get="/subscribers" hx-include="this, [name='term']" hx-trigger="change" hx-target="#table" hx-swap="outerHTML"  class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1">
             <option value="all" <%= if (status == "all") { %>selected<% } %> >All</option>
             <option value="true" <%= if (status == "true") { %>selected<% } %> >Subscribed</option>
             <option value="false" <%= if (status == "false") { %>selected<% } %> >Unsubscribed</option>
