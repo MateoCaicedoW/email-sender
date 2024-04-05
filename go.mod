@@ -11,11 +11,15 @@ require (
 
 require (
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
+	github.com/google/uuid v1.4.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e // indirect
+	go.uber.org/atomic v1.9.0 // indirect
 )
 
 require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
+	github.com/go-co-op/gocron v1.37.0
 	github.com/go-playground/form/v4 v4.2.1 // indirect
 	github.com/gobuffalo/validate v2.0.4+incompatible
 	github.com/gofrs/uuid/v5 v5.0.0 // indirect

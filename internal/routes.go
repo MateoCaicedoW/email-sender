@@ -35,6 +35,7 @@ func AddRoutes(r server.Router) error {
 
 	r.Group("/emails/", func(r server.Router) {
 		r.HandleFunc("GET /{$}", emails.List)
+		r.HandleFunc("GET /new", emails.New)
 		r.HandleFunc("POST /send", emails.Send)
 
 	})

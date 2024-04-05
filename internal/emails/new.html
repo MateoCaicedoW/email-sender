@@ -1,0 +1,109 @@
+<div id="modal-header" class="flex flex-col gap-4 p-5">
+    <div class="flex justify-between items-center">
+        <div>
+            <h2 class="text-xl font-semibold text-[#EEEEEE]">Say something to your subs!</h2>
+        </div>
+
+        <button type="button" @click="show = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6L18 18" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+    </div>
+</div>
+<div id="modal-body" class="px-5">
+    <form action="/send_email"
+    hx-post="/emails/send"
+    hx-trigger="submit"
+    hx-target="#modal"
+    hx-swap="outerHTML"
+    id="sendEmail" enctype="multipart/form-data">
+        <div class="mb-4">
+            <div class="flex flex-col gap-2">
+                <label for="" class="text-[#EEEEEE] text-sm">Email Name</label>
+                <input type="text" value="<%= email.Name %>" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                    <%= if (errors["name"]) { %>
+                        border-red-500 border
+                    <% } %>
+                <% } %>" placeholder="Name" name="Name" >
+
+                <%= partial("partials/input_error.html", {
+                    errorName: "name",
+                }) %>
+            </div>
+        </div>
+        <div class="mb-4">
+            <div class="flex flex-col gap-2">
+                <label for="" class="text-[#EEEEEE] text-sm">Subject</label>
+                <input type="text" value="<%= email.Subject %>" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                    <%= if (errors["subject"]) { %>
+                        border-red-500 border
+                    <% } %>
+                <% } %>" placeholder="Subject" name="Subject" >
+
+                <%= partial("partials/input_error.html", {
+                    errorName: "subject",
+                }) %>
+            </div>
+        </div>
+
+        <div x-data="{show:<%= email.Scheduled %>}" class="flex gap-5 justify-between">
+            <div class="mb-4">
+                <div class="flex flex-col gap-2">
+                    <label for="" class="text-[#EEEEEE] text-sm">Schedule</label>
+                    <div class="flex">
+                        <label class="relative cursor-pointer pt-1 h-fit">
+                            <input type="checkbox" id="TLDRSectionEnabled" name="Scheduled" value="true" class="sr-only peer" <%= if (email.Scheduled) { %>checked<% } %>>
+                            <input type="checkbox" id="TLDRSectionEnabled-unchecked" name="Scheduled" value="false" class="sr-only" checked>
+                            <div @click="show =!show" class="pt-1 w-9 h-5 bg-[#31363F] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[6px] after:left-[1px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#76ABAE] flex"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4" x-show="show" style="display: none;">
+                <div class="flex flex-col gap-2">
+                    <label for="" class="text-[#EEEEEE] text-sm">Date to send</label>
+                    <input type="datetime-local" value="<%= email.ScheduledAt %>" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                        <%= if (errors["scheduled_at"]) { %>
+                            border-red-500 border
+                        <% } %>
+                    <% } %>" placeholder="ScheduledAt" name="ScheduledAt" >
+
+                    <%= partial("partials/input_error.html", {
+                        errorName: "scheduled_at",
+                    }) %>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <div class="flex flex-col gap-2">
+                <label for="" class="text-[#EEEEEE] text-sm">Message</label>
+                <textarea id="message" name="Message" rows="4" placeholder="Write a message"
+                class="resize-none bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                    <%= if (errors["message"]) { %>
+                        border-red-500 border
+                    <% } %>
+                <% } %>"><%= email.Message %></textarea>
+                <%= partial("partials/input_error.html", {
+                    errorName: "message",
+                }) %>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label for="attachment" class="block text-gray-300 text-sm font-bold mb-2">Attachment</label>
+            <input class="w-full px-3 py-2 focus:outline-none bg-[#31363F]  rounded-lg text-[#EEEEEE]" name="attachment" id="file_input" type="file">
+        </div>
+    </form>
+</div>
+
+<div id="modal-actions" class="flex gap-3 p-5 justify-between">
+    <button type="button" @click="show = false" class="text-center justify-center bg-[#EEEEEE] px-4 h-8 rounded-lg hover:bg-[#EEEEEE]/75">Cancel</button>
+    <button 
+    type="submit"  
+    form="sendEmail" class="w-full bg-[#76ABAE] h-8 text-white px-4 py-2 rounded-md hover:bg-[#76ABAE]/50 focus:outline-none focus:shadow-outline-blue flex justify-center flex-col items-center">Send Email</button>
+</div>
+

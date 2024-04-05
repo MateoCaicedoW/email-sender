@@ -1,29 +1,15 @@
 <div class="w-full text-[#EEEEEE] flex flex-col gap-4">
     <div class="flex justify-end">
-        <button hx-post="/emails/send" hx-target="this" hx-indicator="#indicator" hx-trigger="click" type="button" class="bg-[#76ABAE] h-8 text-white px-4 py-2 rounded-md hover:bg-[#76ABAE]/50 focus:outline-none focus:shadow-outline-blue flex justify-center flex-col">
-            Send Email
+        <button hx-get="/emails/new" hx-target="#modal" hx-trigger="click" hx-swap="outerHTML" type="button" class="bg-[#76ABAE] h-8 text-white px-4 py-2 rounded-md hover:bg-[#76ABAE]/50 focus:outline-none focus:shadow-outline-blue flex justify-center flex-col">
+            New Email
         </button>
     </div>
 
 
     <div class="grid grid-cols-5 gap-2 pt-5">
-        <input type="text"  hx-get="/subscribers" hx-include="this, [name='status']" hx-trigger="keyup changed delay:200ms" hx-target="#table" hx-swap="outerHTML" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1" placeholder="Search..." name="term">
+        <input type="text"  hx-get="/emails" hx-include="this" hx-trigger="keyup changed delay:200ms" hx-target="#table" hx-swap="outerHTML" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1" placeholder="Search..." name="term">
     </div>
 
 
     <%= partial("emails/table.html") %>
 </div>
-
-<%= contentFor("hxIndicator") {%>
-    <div id="indicator" class="indicator min-h-screen modal-container transition-opacity justify-center w-full fixed top-0 left-0 bottom-0 right-0 flex items-center">
-        <div class="flex justify-center items-center h-full">
-            <div class="flex items-center bg-[#222831] w-72 h-28 rounded-xl justify-center shadow-xl">
-                <svg class="animate-spin" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="48" height="48" rx="24" fill="#31363F"/>
-                    <path d="M24 14.25V16.75M24 30V34M17.75 24H14.25M33.25 24H31.75M30.4571 30.4571L29.75 29.75M30.6642 17.4158L29.25 18.83M16.9216 31.0784L19.75 28.25M17.1287 17.2087L19.25 19.33" stroke="#76ABAE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>                
-                <span class="pl-4 text-[#EEEEEE]">Sending Email...</span>
-            </div>
-        </div>
-    </div>
-<% } %>

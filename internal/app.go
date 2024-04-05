@@ -2,11 +2,14 @@ package internal
 
 import (
 	"embed"
+	"time"
 
 	"github.com/MateoCaicedoW/email-sender/public"
+
 	"github.com/leapkit/core/assets"
 	"github.com/leapkit/core/db"
 	"github.com/leapkit/core/envor"
+	"github.com/leapkit/core/form"
 	"github.com/leapkit/core/gloves"
 
 	"github.com/paganotoni/tailo"
@@ -49,3 +52,26 @@ var (
 	// connection string.
 	DB = db.ConnectionFn(DatabaseURL)
 )
+
+func init() {
+	//register custom type decoder functions for time.Time
+	form.RegisterCustomTypeFunc(DecodeTime, time.Time{})
+}
+
+func DecodeTime(vals []string) (interface{}, error) {
+	if len(vals) == 0 {
+		return time.Time{}, nil
+	}
+
+	val := vals[0]
+	if val == "" {
+		return time.Time{}, nil
+	}
+
+	tt, err := time.Parse("2006-01-02T15:04", val)
+	if err != nil {
+		return nil, err
+	}
+
+	return tt, nil
+}

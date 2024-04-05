@@ -1,49 +1,85 @@
 package emails
 
 import (
+	"io"
 	"net/http"
 
 	"github.com/MateoCaicedoW/GO-SMTP/email"
 	"github.com/MateoCaicedoW/email-sender/internal/app/models"
+	"github.com/MateoCaicedoW/email-sender/internal/sender"
+	"github.com/leapkit/core/form"
+	"github.com/leapkit/core/render"
 )
 
 func Send(w http.ResponseWriter, r *http.Request) {
-	s := r.Context().Value("mailerService").(*service)
+	s := r.Context().Value("mailerService").(sender.SenderService)
 	subService := r.Context().Value("subscriberService").(models.SubscriberService)
-	message := r.FormValue("message")
-	// file, header, err := r.FormFile("attachment")
-	// if err != nil && err != http.ErrMissingFile {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	emailService := r.Context().Value("emailService").(models.EmailService)
 
-	var attachments []email.Attachment
-
-	// if file != nil {
-	// 	defer file.Close()
-
-	// 	bytes, err := io.ReadAll(file)
-	// 	if err != nil {
-	// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	}
-
-	// 	attachments = append(attachments, email.Attachment{
-	// 		FileName: header.Filename,
-	// 		Content:  bytes,
-	// 	})
-	// }
-
-	subs, err := subService.All()
-	if err != nil {
+	em := models.Email{}
+	if err := form.Decode(r, &em); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	for _, sub := range subs {
-		if err := s.SendEmail("Sender App", message, sub.Email, attachments); err != nil {
+	verrs := emailService.Validate(&em)
+	if verrs.HasAny() {
+		rx := render.FromCtx(r.Context())
+
+		rx.Set("errors", verrs.Errors)
+		rx.Set("email", em)
+		if err := rx.RenderWithLayout("emails/new.html", "modal.html"); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		return
+	}
+
+	file, header, err := r.FormFile("attachment")
+	if err != nil && err != http.ErrMissingFile {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var attachments []email.Attachment
+
+	if file != nil {
+		defer file.Close()
+
+		bytes, err := io.ReadAll(file)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+
+		attachments = append(attachments, email.Attachment{
+			FileName: header.Filename,
+			Content:  bytes,
+		})
+
+		em.AttachmentName = header.Filename
+		em.AttachmentContent = attachments[0].Content
+	}
+
+	if !em.Scheduled {
+		subs, err := subService.All()
+		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		for _, sub := range subs {
+			if err := s.SendEmail(em.Name, em.Message, sub.Email, em.Subject, attachments); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+
+		em.Sent = true
+	}
+
+	if err := emailService.Create(&em); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("HX-Redirect", "/emails/")
