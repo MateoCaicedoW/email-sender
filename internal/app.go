@@ -40,8 +40,8 @@ var (
 	GlovesOptions = []gloves.Option{
 		// Run the tailo watcher so when changes are made to
 		// the html code it rebuilds css.
-		gloves.WithRunner(tailo.WatcherFn(TailoOptions...)),
-		gloves.WithRunner(Assets.Watch),
+		// gloves.WithRunner(tailo.WatcherFn(TailoOptions...)),
+		// gloves.WithRunner(Assets.Watch),
 		gloves.WatchExtension(".go", ".css", ".js"),
 	}
 
