@@ -12,8 +12,6 @@ RUN go run ./cmd/build
 
 FROM alpine
 RUN apk add --no-cache tzdata ca-certificates
-RUN apk add --no-cache dcron
-
 WORKDIR /bin/
 
 # Copying binaries
@@ -25,9 +23,5 @@ RUN chmod +x /bin/app
 RUN chmod +x /bin/db
 RUN chmod +x /bin/cronjobs
 
-# Copying crontab file
-COPY crontab /etc/cron.d/cronjobs
-RUN chmod 644 /etc/cron.d/cronjobs
-
-# Running the app and cronjobs
-CMD crond -f -L /dev/null && /bin/db migrate && /bin/app
+# Running the app
+CMD /bin/db migrate; /bin/app;
