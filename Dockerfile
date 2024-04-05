@@ -19,4 +19,9 @@ COPY --from=builder /src/app/bin/app .
 COPY --from=builder /src/app/bin/db .
 COPY --from=builder /src/app/bin/cronjobs .
 
+RUN chmod +x /bin/app
+RUN chmod +x /bin/db
+RUN chmod +x /bin/cronjobs
+
+# Running the app
 CMD /bin/db migrate; /bin/app;
