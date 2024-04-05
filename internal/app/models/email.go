@@ -36,4 +36,6 @@ type EmailService interface {
 	Scheduled() (Emails, error)
 	Update(e *Email) error
 	Validate(e *Email) *validate.Errors
+	CountSent() (int, error)
+	CountScheduled() (int, error)
 }

@@ -4,10 +4,33 @@
             New Email
         </button>
     </div>
-
+    <div hx-get="/emails/indicators" hx-trigger="load" hx-target="this">
+        <div class="grid grid-cols-5 gap-4 ">
+            <div class="col-span-1">
+                <div role="status" class="max-w-sm animate-pulse">
+                    <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+                </div>
+            </div>
+        
+            <div class="col-span-1">
+                <div role="status" class="max-w-sm animate-pulse">
+                    <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[360px] mb-2.5"></div>
+                    <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="grid grid-cols-5 gap-2 pt-5">
-        <input type="text"  hx-get="/emails" hx-include="this" hx-trigger="keyup changed delay:200ms" hx-target="#table" hx-swap="outerHTML" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1" placeholder="Search..." name="term">
+        <input type="text"  hx-get="/emails" hx-include="this, [name='status']" hx-trigger="keyup changed delay:200ms" hx-target="#table" hx-swap="outerHTML" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1 col-start-4" placeholder="Search..." name="term">
+        <select name="status" id="" hx-get="/emails" hx-include="this, [name='term']" hx-trigger="change" hx-target="#table" hx-swap="outerHTML"  class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1 col-start-5">
+            <option value="all" <%= if (status == "all") { %>selected<% } %> >All</option>
+            <option value="true" <%= if (status == "true") { %>selected<% } %> >Sent</option>
+            <option value="false" <%= if (status == "false") { %>selected<% } %> >Not Sent</option>
+        </select>
     </div>
 
 

@@ -105,3 +105,23 @@ func (s *service) Validate(e *models.Email) *validate.Errors {
 
 	return verrs
 }
+
+func (s *service) CountSent() (int, error) {
+	var total int
+	err := s.db.Get(&total, `SELECT COUNT(*) FROM emails WHERE sent = true`)
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
+
+func (s *service) CountScheduled() (int, error) {
+	var total int
+	err := s.db.Get(&total, `SELECT COUNT(*) FROM emails WHERE scheduled = true AND sent = false`)
+	if err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
