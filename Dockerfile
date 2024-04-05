@@ -19,4 +19,4 @@ COPY --from=builder /src/app/bin/app .
 COPY --from=builder /src/app/bin/db .
 COPY --from=builder /src/app/bin/cronjobs .
 
-CMD /bin/db migrate; /bin/app; /bin/cronjobs
+CMD /bin/db migrate; /bin/cronjobs; /bin/app;

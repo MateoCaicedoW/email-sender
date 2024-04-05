@@ -21,7 +21,7 @@ func main() {
 		schedule string
 		task     func() error
 	}{
-		{"0 8-20 * * *", tasks.ScheduledEmails},
+		{"*/2 * * * *", tasks.ScheduledEmails},
 	}
 
 	for _, job := range jobs {
