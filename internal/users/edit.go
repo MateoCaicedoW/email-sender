@@ -1,4 +1,4 @@
-package subscribers
+package users
 
 import (
 	"net/http"
@@ -12,47 +12,45 @@ import (
 
 func Edit(w http.ResponseWriter, r *http.Request) {
 	rx := render.FromCtx(r.Context())
-	subService := r.Context().Value("subscriberService").(models.SubscriberService)
-	subID := uuid.FromStringOrNil(r.PathValue("id"))
-	session := session.FromCtx(r.Context())
-	companyID := session.Values["company_id"].(uuid.UUID)
-	sub, err := subService.Find(subID, companyID)
+	userService := r.Context().Value("userService").(models.UserService)
+	userID := uuid.FromStringOrNil(r.PathValue("id"))
+
+	user, err := userService.FindByID(userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	rx.Set("subscriber", sub)
-	if err := rx.RenderWithLayout("subscribers/edit.html", "modal.html"); err != nil {
+	rx.Set("user", user)
+	if err := rx.RenderWithLayout("users/edit.html", "modal.html"); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
 func Update(w http.ResponseWriter, r *http.Request) {
-	subService := r.Context().Value("subscriberService").(models.SubscriberService)
-	subID := uuid.FromStringOrNil(r.PathValue("id"))
+	userService := r.Context().Value("userService").(models.UserService)
+	userID := uuid.FromStringOrNil(r.PathValue("id"))
 	session := session.FromCtx(r.Context())
 	companyID := session.Values["company_id"].(uuid.UUID)
-	sub, err := subService.Find(subID, companyID)
+	user, err := userService.FindByID(userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	if err := form.Decode(r, sub); err != nil {
+	if err := form.Decode(r, &user); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	sub.ID = subID
-	errs := subService.Validate(sub)
+	errs := userService.Validate(user, companyID)
 	if errs.HasAny() {
 		rx := render.FromCtx(r.Context())
 
-		rx.Set("subscriber", sub)
+		rx.Set("user", user)
 		rx.Set("errors", errs.Errors)
-		if err := rx.RenderWithLayout("subscribers/edit.html", "modal.html"); err != nil {
+		if err := rx.RenderWithLayout("users/edit.html", "modal.html"); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -60,10 +58,10 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := subService.Update(sub); err != nil {
+	if err := userService.Update(user); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("HX-Redirect", "/subscribers")
+	w.Header().Set("HX-Redirect", "/users")
 }

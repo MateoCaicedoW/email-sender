@@ -14,6 +14,7 @@ require (
 	github.com/google/uuid v1.4.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/serenize/snaker v0.0.0-20201027110005-a7ad2135616e // indirect
+	github.com/wawandco/maildoor v0.2.4-0.20240404144831-9eacd5338981 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 )
 

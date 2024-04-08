@@ -8,11 +8,13 @@ import (
 )
 
 type Email struct {
-	ID      uuid.UUID `json:"id" db:"id"`
-	Name    string    `json:"name" db:"name"`
-	Message string    `json:"message" db:"message"`
-	Sent    bool      `json:"sent" db:"sent"`
-	Subject string    `json:"subject" db:"subject"`
+	ID        uuid.UUID `json:"id" db:"id"`
+	CompanyID uuid.UUID `json:"company_id" db:"company_id"`
+
+	Name    string `json:"name" db:"name"`
+	Message string `json:"message" db:"message"`
+	Sent    bool   `json:"sent" db:"sent"`
+	Subject string `json:"subject" db:"subject"`
 
 	// Attachment Attributes
 	AttachmentName    string `db:"attachment_name"`
@@ -32,10 +34,10 @@ type Emails []Email
 // EmailService provides the interface for the email service
 type EmailService interface {
 	Create(e *Email) error
-	List(perPage, page int, term, status string) (List, error)
+	List(perPage, page int, term, status string, companyID uuid.UUID) (List, error)
 	Scheduled() (Emails, error)
 	Update(e *Email) error
 	Validate(e *Email) *validate.Errors
-	CountSent() (int, error)
-	CountScheduled() (int, error)
+	CountSent(companyID uuid.UUID) (int, error)
+	CountScheduled(companyID uuid.UUID) (int, error)
 }

@@ -29,19 +29,48 @@
                         <div class="flex flex-col gap-2">
                             <a href="/emails" class="text-[#EEEEEE]/75 h-8 px-2 rounded-lg hover:bg-[#31363F] flex items-center text-sm <%= activeClass("emails.*", currentURL) %> [&.active]:bg-[#31363F]">Emails</a>
                             <a href="/subscribers" class="text-[#EEEEEE]/75 h-8 px-2 rounded-lg hover:bg-[#31363F] flex items-center text-sm <%= activeClass("subscribers.*", currentURL) %> [&.active]:bg-[#31363F]">Subscribers</a>
+                            <a href="/users" class="text-[#EEEEEE]/75 h-8 px-2 rounded-lg hover:bg-[#31363F] flex items-center text-sm <%= activeClass("users.*", currentURL) %> [&.active]:bg-[#31363F]">Users</a>
                         </div>
                     </div>
 
-                    <a class="text-[#EEEEEE]/75">
-                        Mateo Caicedo
-                    </a>
+                    <div class="text-[#EEEEEE]/75 flex justify-between items-center gap-5 border-t border-t-[#31363F] pt-5">
+                        <div class="flex flex-col gap-1 text-sm">
+                            <div>
+                                <%= currentUser.FirstName %> <%= currentUser.LastName %>
+                            </div>
+                            <span class="text-xs truncate">
+                                <%= currentUser.Email %>
+                            </span>
+                        </div>
+
+                        <a href="/logout">
+                            <svg class="flex flex-shrink-0" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.3333 14.0875L17.5 10.025M17.5 10.025L13.3333 5.96252M17.5 10.025H7.5M7.5 2.71252H6.5C5.09987 2.71252 4.3998 2.71252 3.86502 2.9782C3.39462 3.21189 3.01217 3.58478 2.77248 4.04342C2.5 4.56483 2.5 5.2474 2.5 6.61252V13.4375C2.5 14.8027 2.5 15.4852 2.77248 16.0066C3.01217 16.4653 3.39462 16.8382 3.86502 17.0719C4.3998 17.3375 5.09987 17.3375 6.5 17.3375H7.5" stroke="#98A2B3" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </a>
+                    </div>
                 </aside>
             </nav>
         </div>
 
         <div class="w-full">
-            <header class="h-[60px]  border-b border-b-[#31363F]">
-
+            <header class="h-[80px]  border-b border-b-[#31363F] px-8 py-2 flex justify-end">
+                <div class="relative flex justify-center items-center" x-data="{show:false}" @click.away="show=false">
+                    <div>
+                        <button class="text-[#EEEEEE]/75 p-2 rounded-lg flex items-center gap-2 border border-[#EEEEEE]/30 bg-[#31363F]" @click="show =!show">
+                            <%= currentCompany.Name %>
+    
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                                <path d="M5.97437 7.5L10.9744 12.5L15.9744 7.5" stroke="#667085" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"></path>
+                            </svg>
+                        </button>
+                        <ul style="display: none;"  x-show="show" class="absolute w-full z-50 flex flex-col text-[#EEEEEE]/75 border border-[#EEEEEE]/30 rounded-lg text-start p-2 bg-[#222831] mt-2 overflow-auto max-h-[113px]">
+                            <%= for (comp) in userCompanies { %>
+                                <a href="/switch_company/<%= comp.ID %>" class="px-2 py-1 font-medium hover:bg-[#31363F] rounded-lg cursor-pointer"><%= comp.Name %></a>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
             </header>
 
             <section class="flex flex-col gap-4 w-full" >

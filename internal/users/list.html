@@ -1,0 +1,24 @@
+<div class="w-full text-[#EEEEEE] flex flex-col gap-4">
+    <div class="flex justify-end">
+        <button hx-get="/users/new" hx-target="#modal" hx-trigger="click" hx-swap="outerHTML" type="button" class="bg-[#76ABAE] h-8 text-white px-4 py-2 rounded-md hover:bg-[#76ABAE]/50 focus:outline-none focus:shadow-outline-blue flex justify-center flex-col">
+            Add User
+        </button>
+    </div>
+    <div hx-get="/users/indicators" hx-trigger="load" hx-target="this">
+        <div class="grid grid-cols-5 gap-4 ">
+            <div class="col-span-1">
+                <div class="flex flex-col gap-2 border rounded-lg p-5 border-[#31363F]">
+                    <label class="select-none text-sm text-slate-11 text-xs uppercase">Users</label>
+                    <span class="text-2xl tracking-[-0.288px] text-slate-12 font-normal"><%= list.Total %></span>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+
+    <div class="grid grid-cols-5 gap-2 pt-5">
+        <input type="text" value="<%= term %>" hx-get="/users" hx-include="this" hx-trigger="keyup changed delay:200ms" hx-target="#table" hx-swap="outerHTML" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:border-0 focus:outline-0 col-span-1 col-start-5" placeholder="Search..." name="term">
+    </div>
+
+    <%= partial("users/table.html") %>
+</div>

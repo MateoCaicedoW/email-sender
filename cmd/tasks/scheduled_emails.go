@@ -2,6 +2,7 @@ package tasks
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/MateoCaicedoW/GO-SMTP/email"
 	myServer "github.com/MateoCaicedoW/GO-SMTP/server"
@@ -29,14 +30,12 @@ func ScheduledEmails() error {
 		return err
 	}
 
-	if len(emails) == 0 {
-		fmt.Println("No emails to send")
-		return nil
-	}
-
-	fmt.Println("Sending scheduled emails...")
 	for _, e := range emails {
-		fmt.Printf("Sending email %s\n", e.Name)
+		if e.ScheduledAt.After(time.Now()) {
+			continue
+		}
+
+		fmt.Printf("Sending email... %s\n %s\n", e.Name, e.Subject)
 		var attachments email.Attachments
 		if e.AttachmentName != "" {
 			attachments = append(attachments, email.Attachment{
@@ -45,7 +44,7 @@ func ScheduledEmails() error {
 			})
 		}
 
-		subs, err := subService.All()
+		subs, err := subService.All(e.CompanyID)
 		if err != nil {
 			fmt.Println(err)
 			return err
@@ -69,7 +68,5 @@ func ScheduledEmails() error {
 
 		fmt.Println("Email Sent ✅")
 	}
-
-	fmt.Println("Done ✅")
 	return nil
 }

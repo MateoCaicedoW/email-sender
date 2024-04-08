@@ -65,7 +65,7 @@
             <div class="mb-4" x-show="show" style="display: none;">
                 <div class="flex flex-col gap-2">
                     <label for="" class="text-[#EEEEEE] text-sm">Date to send</label>
-                    <input type="datetime-local" value="<%= email.ScheduledAt %>" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                    <input type="datetime-local" value="<%= email.ScheduledAt.Format("2006-01-02 15:04:05") %>" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
                         <%= if (errors["scheduled_at"]) { %>
                             border-red-500 border
                         <% } %>

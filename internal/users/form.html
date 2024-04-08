@@ -1,0 +1,55 @@
+<div id="modal-header" class="flex flex-col gap-4 p-5">
+    <div class="flex justify-between items-center">
+        <div>
+            <h2 class="text-xl font-semibold text-[#EEEEEE]">Add User</h2>
+        </div>
+
+        <button type="button" @click="show = false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6L18 18" stroke="#EEEEEE" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+    </div>
+</div>
+<div id="modal-body" class="px-5">
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="" class="text-[#EEEEEE] text-sm">First Name</label>
+            <input type="text" name="FirstName"  class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                <%= if (errors["first_name"]) { %>
+                    border-red-500 border
+                <% } %>
+            <% } %>"  placeholder="First Name" required value="<%= user.FirstName %>">
+            <%= partial("partials/input_error.html", {
+                errorName: "first_name",
+            }) %>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="" class="text-[#EEEEEE] text-sm">Last Name</label>
+            <input type="text" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                <%= if (errors["last_name"]) { %>
+                    border-red-500 border
+                <% } %>
+            <% } %>" placeholder="Last Name" name="LastName" required value="<%= user.LastName %>">
+
+            <%= partial("partials/input_error.html", {
+                errorName: "last_name",
+            }) %>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="" class="text-[#EEEEEE] text-sm">Email</label>
+            <input type="email" class="bg-[#31363F] rounded-lg text-[#EEEEEE] px-2 py-1 focus:ring-0 focus:outline-0 col-span-3 <%= if (errors) { %>
+                <%= if (errors["email"]) { %>
+                    border-red-500 border
+                <% } %>
+            <% } %>" placeholder="Email" name="Email" required value="<%= user.Email %>">
+
+            <%= partial("partials/input_error.html", {
+                errorName: "email",
+            }) %>
+        </div>
+    </div>
+</div>

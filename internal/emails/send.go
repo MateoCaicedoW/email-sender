@@ -7,21 +7,25 @@ import (
 	"github.com/MateoCaicedoW/GO-SMTP/email"
 	"github.com/MateoCaicedoW/email-sender/internal/app/models"
 	"github.com/MateoCaicedoW/email-sender/internal/sender"
+	"github.com/gofrs/uuid/v5"
 	"github.com/leapkit/core/form"
 	"github.com/leapkit/core/render"
+	"github.com/leapkit/core/session"
 )
 
 func Send(w http.ResponseWriter, r *http.Request) {
 	s := r.Context().Value("mailerService").(sender.SenderService)
 	subService := r.Context().Value("subscriberService").(models.SubscriberService)
 	emailService := r.Context().Value("emailService").(models.EmailService)
-
+	session := session.FromCtx(r.Context())
+	companyID := session.Values["company_id"].(uuid.UUID)
 	em := models.Email{}
 	if err := form.Decode(r, &em); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	em.CompanyID = companyID
 	verrs := emailService.Validate(&em)
 	if verrs.HasAny() {
 		rx := render.FromCtx(r.Context())
@@ -61,7 +65,7 @@ func Send(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !em.Scheduled {
-		subs, err := subService.All()
+		subs, err := subService.All(companyID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

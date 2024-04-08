@@ -6,6 +6,7 @@ import (
 	"github.com/MateoCaicedoW/email-sender/internal/app/models"
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
+	"github.com/gofrs/uuid/v5"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -20,7 +21,7 @@ func NewService(db *sqlx.DB) *service {
 }
 
 func (s *service) Create(e *models.Email) error {
-	_, err := s.db.NamedExec(`INSERT INTO emails (name, message, sent, subject, attachment_name, attachment_content, scheduled, scheduled_at) VALUES (:name, :message, :sent, :subject, :attachment_name, :attachment_content, :scheduled, :scheduled_at)`, e)
+	_, err := s.db.NamedExec(`INSERT INTO emails (name, message, sent, subject, attachment_name, attachment_content, scheduled, scheduled_at, company_id) VALUES (:name, :message, :sent, :subject, :attachment_name, :attachment_content, :scheduled, :scheduled_at, :company_id)`, e)
 	if err != nil {
 		return err
 	}
@@ -28,7 +29,7 @@ func (s *service) Create(e *models.Email) error {
 	return nil
 }
 
-func (s *service) List(perPage, page int, term, status string) (models.List, error) {
+func (s *service) List(perPage, page int, term, status string, companyID uuid.UUID) (models.List, error) {
 	query := `
 
 	SELECT 
@@ -36,11 +37,13 @@ func (s *service) List(perPage, page int, term, status string) (models.List, err
 	FROM
 		emails
 	WHERE 
+		emails.company_id = ?
+	AND
 		(emails.name ILIKE '%' || ? || '%')
 	`
 	var emails models.Emails
 	offset := (page - 1) * perPage
-	params := []interface{}{term}
+	params := []interface{}{companyID, term}
 
 	if status != "all" && status != "" {
 		query += ` AND emails.sent = ?`
@@ -73,7 +76,7 @@ func (s *service) List(perPage, page int, term, status string) (models.List, err
 
 func (s *service) Scheduled() (models.Emails, error) {
 	var emails models.Emails
-	err := s.db.Select(&emails, `SELECT * FROM emails WHERE scheduled = true AND sent = false AND scheduled_at <= NOW()`)
+	err := s.db.Select(&emails, `SELECT * FROM emails WHERE scheduled = true AND sent = false`)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +85,17 @@ func (s *service) Scheduled() (models.Emails, error) {
 }
 
 func (s *service) Update(e *models.Email) error {
-	_, err := s.db.NamedExec(`UPDATE emails SET name = :name, message = :message, sent = :sent, subject = :subject, attachment_name = :attachment_name, attachment_content = :attachment_content, scheduled = :scheduled, scheduled_at = :scheduled_at WHERE id = :id`, e)
+	_, err := s.db.NamedExec(`
+	UPDATE emails 
+	SET name = :name,
+	message = :message, 
+	sent = :sent, 
+	subject = :subject, 
+	attachment_name = :attachment_name, 
+	attachment_content = :attachment_content, 
+	scheduled = :scheduled, 
+	scheduled_at = :scheduled_at 
+	WHERE id = :id AND company_id = :company_id`, e)
 	if err != nil {
 		return err
 	}
@@ -106,9 +119,9 @@ func (s *service) Validate(e *models.Email) *validate.Errors {
 	return verrs
 }
 
-func (s *service) CountSent() (int, error) {
+func (s *service) CountSent(companyID uuid.UUID) (int, error) {
 	var total int
-	err := s.db.Get(&total, `SELECT COUNT(*) FROM emails WHERE sent = true`)
+	err := s.db.Get(&total, `SELECT COUNT(*) FROM emails WHERE sent = true AND company_id = $1`, companyID)
 	if err != nil {
 		return 0, err
 	}
@@ -116,9 +129,9 @@ func (s *service) CountSent() (int, error) {
 	return total, nil
 }
 
-func (s *service) CountScheduled() (int, error) {
+func (s *service) CountScheduled(companyID uuid.UUID) (int, error) {
 	var total int
-	err := s.db.Get(&total, `SELECT COUNT(*) FROM emails WHERE scheduled = true AND sent = false`)
+	err := s.db.Get(&total, `SELECT COUNT(*) FROM emails WHERE scheduled = true AND sent = false AND company_id = $1`, companyID)
 	if err != nil {
 		return 0, err
 	}

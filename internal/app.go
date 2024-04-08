@@ -68,7 +68,7 @@ func DecodeTime(vals []string) (interface{}, error) {
 		return time.Time{}, nil
 	}
 
-	tt, err := time.Parse("2006-01-02T15:04", val)
+	tt, err := time.Parse("2006-01-02T15:04:05", val)
 	if err != nil {
 		return nil, err
 	}

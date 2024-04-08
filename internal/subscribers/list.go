@@ -5,10 +5,14 @@ import (
 	"strconv"
 
 	"github.com/MateoCaicedoW/email-sender/internal/app/models"
+	"github.com/gofrs/uuid/v5"
 	"github.com/leapkit/core/render"
+	"github.com/leapkit/core/session"
 )
 
 func List(w http.ResponseWriter, r *http.Request) {
+	session := session.FromCtx(r.Context())
+	companyID := session.Values["company_id"].(uuid.UUID)
 	subService := r.Context().Value("subscriberService").(models.SubscriberService)
 	rx := render.FromCtx(r.Context())
 
@@ -20,7 +24,7 @@ func List(w http.ResponseWriter, r *http.Request) {
 	term := r.URL.Query().Get("term")
 	status := r.URL.Query().Get("status")
 
-	subs, err := subService.List(10, page, term, status)
+	subs, err := subService.List(10, page, term, status, companyID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
