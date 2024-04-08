@@ -2,7 +2,6 @@ package tasks
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/MateoCaicedoW/GO-SMTP/email"
 	myServer "github.com/MateoCaicedoW/GO-SMTP/server"
@@ -37,11 +36,6 @@ func ScheduledEmails() error {
 
 	fmt.Println("Sending scheduled emails...")
 	for _, e := range emails {
-		if e.ScheduledAt.After(time.Now()) {
-			fmt.Printf("Email %s is scheduled for %s\n", e.Name, e.ScheduledAt)
-			continue
-		}
-
 		fmt.Printf("Sending email %s\n", e.Name)
 		var attachments email.Attachments
 		if e.AttachmentName != "" {
