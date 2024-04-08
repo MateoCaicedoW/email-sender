@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	loc, err := time.LoadLocation("America/Bogota")
+	loc, err := time.LoadLocation("UTC")
 	if err != nil {
 		log.Fatal(fmt.Errorf("error loading time zone: %w", err))
 	}
