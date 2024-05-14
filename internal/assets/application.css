@@ -6,3 +6,49 @@
     background: rgba(52, 64, 84, 0.70) !important;
     backdrop-filter: blur(8px);
 }
+div:where(.swal2-container).swal2-backdrop-show, div:where(.swal2-container).swal2-noanimation {
+    background: rgba(52, 64, 84, 0.70) !important;
+    backdrop-filter: blur(8px);
+}
+
+div:where(.swal2-container) .swal2-html-container{
+    text-align: left !important;
+    margin-top: 8px !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+div:where(.swal2-container) h2:where(.swal2-title){
+    text-align: left !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup){
+    border-radius: 12px !important; 
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+    padding-top: 10px !important;
+    padding-bottom: 24px !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-close){
+    color: #667085 !important;
+    width: 15px !important;
+    height: 15px !important;
+    margin-top: 17px !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-close):hover{
+    color: #667085 !important;
+    background: rgba(0,0,0,0) !important;
+}
+
+div:where(.swal2-container) div:where(.swal2-actions){
+    display: flex !important;
+    margin: 0px !important;
+    margin-top: 32px !important;
+    justify-content: space-between !important;
+}
