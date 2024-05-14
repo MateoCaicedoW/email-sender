@@ -1,6 +1,5 @@
 package models
 
-// TODO: Where should this live?
 type List struct {
 	PerPage int
 	Page    int
