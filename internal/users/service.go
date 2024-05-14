@@ -30,20 +30,6 @@ func (s *service) FindByEmail(email string) (*models.User, error) {
 
 	return user, nil
 }
-func (s *service) FindByEmailAndCompany(email string, companyID uuid.UUID) (models.User, error) {
-	query := `SELECT 
-	users.*
-	FROM users 
-	JOIN user_companies ON users.id = user_companies.user_id
-	WHERE email = $1 AND company_id = $2`
-	user := models.User{}
-	err := s.db.Get(&user, query, email, companyID)
-	if err != nil && err.Error() != "sql: no rows in result set" {
-		return user, err
-	}
-
-	return user, nil
-}
 
 func (s *service) Create(user *models.User) error {
 	query := `INSERT INTO users (first_name, last_name, email) VALUES ($1, $2, $3) RETURNING id`
@@ -53,51 +39,6 @@ func (s *service) Create(user *models.User) error {
 	}
 
 	return nil
-}
-
-func (s *service) ValidateRegister(user models.User) *validate.Errors {
-	verrs := validate.Validate(
-		&validators.StringIsPresent{Field: user.FirstName, Name: "First Name"},
-		&validators.StringIsPresent{Field: user.LastName, Name: "Last Name"},
-		&validators.EmailIsPresent{Field: user.Email, Name: "Email"},
-	)
-
-	if user.Email != "" {
-		verrs.Append(
-			validate.Validate(
-				&validators.FuncValidator{
-					Name:    "Email",
-					Message: "%sUser with this email already exists.",
-					Fn: func() bool {
-						u, err := s.FindByEmail(user.Email)
-						return err == nil && u.ID.IsNil()
-					},
-				},
-			),
-		)
-	}
-
-	return verrs
-}
-
-func (s *service) FirstCompany(id uuid.UUID) (models.Company, error) {
-	query := `
-	SELECT 
-		companies.*
-	FROM
-	companies
-	JOIN user_companies ON companies.id = user_companies.company_id
-	WHERE user_companies.user_id = $1
-	ORDER BY companies.created_at DESC
-	LIMIT 1
-	`
-	company := models.Company{}
-	err := s.db.Get(&company, query, id)
-	if err != nil && err.Error() != "sql: no rows in result set" {
-		return company, err
-	}
-
-	return company, nil
 }
 
 func (s *service) FindByID(id uuid.UUID) (models.User, error) {
@@ -111,28 +52,23 @@ func (s *service) FindByID(id uuid.UUID) (models.User, error) {
 	return user, nil
 }
 
-func (s *service) List(perPage, page int, term string, companyID uuid.UUID) (models.List, error) {
+func (s *service) List(perPage, page int, term string) (models.List, error) {
 	query := `
 
 	SELECT 
 		users.*
 	FROM
-		user_companies
-	JOIN users ON user_companies.user_id = users.id
-	JOIN companies ON user_companies.company_id = companies.id
-
-	WHERE 
-		(companies.id = ?)
-	AND
+		users
+	WHERE
 		((users.first_name ILIKE '%' || ? || '%') 
 	OR 
-		(users.last_name ILIKE '%' || $2 || '%') 
+		(users.last_name ILIKE '%' || $1 || '%') 
 	OR 
-		(users.email ILIKE '%' || $2 || '%'))
+		(users.email ILIKE '%' || $1 || '%'))
 	`
 	var users models.Users
 	offset := (page - 1) * perPage
-	params := []interface{}{companyID, term}
+	params := []interface{}{term}
 
 	var total int
 	count := fmt.Sprintf(`SELECT COUNT(*) FROM (%v) items`, query)
@@ -158,7 +94,7 @@ func (s *service) List(perPage, page int, term string, companyID uuid.UUID) (mod
 	}, nil
 }
 
-func (s *service) Validate(user models.User, companyID uuid.UUID) *validate.Errors {
+func (s *service) Validate(user models.User) *validate.Errors {
 	verrs := validate.Validate(
 		&validators.StringIsPresent{Field: user.FirstName, Name: "First Name"},
 		&validators.StringIsPresent{Field: user.LastName, Name: "Last Name"},
@@ -166,7 +102,7 @@ func (s *service) Validate(user models.User, companyID uuid.UUID) *validate.Erro
 	)
 
 	if user.Email != "" {
-		existing, err := s.FindByEmailAndCompany(user.Email, companyID)
+		existing, err := s.FindByEmail(user.Email)
 		if err != nil {
 			return verrs
 		}
@@ -182,6 +118,16 @@ func (s *service) Validate(user models.User, companyID uuid.UUID) *validate.Erro
 func (s *service) Update(user models.User) error {
 	query := `UPDATE users SET first_name = $1, last_name = $2, email = $3 WHERE id = $4`
 	_, err := s.db.Exec(query, user.FirstName, user.LastName, user.Email, user.ID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *service) Delete(id uuid.UUID) error {
+	query := `DELETE FROM users WHERE id = $1`
+	_, err := s.db.Exec(query, id)
 	if err != nil {
 		return err
 	}

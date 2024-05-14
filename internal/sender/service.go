@@ -6,7 +6,6 @@ import (
 
 	"github.com/MateoCaicedoW/GO-SMTP/email"
 	"github.com/MateoCaicedoW/GO-SMTP/server"
-	"github.com/MateoCaicedoW/email-sender/internal/app/config"
 )
 
 type SenderService interface {
@@ -32,7 +31,7 @@ func (s *service) SendEmail(name, message, to, subject string, attachments []ema
 		Sender:          "smtp.gmail.com",
 		To:              []string{to},
 		Subject:         subject,
-		Body:            fmt.Sprintf(codeVerification, fmt.Sprintf("%s/show", config.BaseURL), message),
+		Body:            fmt.Sprintf(codeVerification, message),
 		BodyContentType: "text/html",
 		Attachments:     attachments,
 	}

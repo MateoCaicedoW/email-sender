@@ -7,7 +7,6 @@ import (
 	"github.com/gofrs/uuid/v5"
 	"github.com/leapkit/core/form"
 	"github.com/leapkit/core/render"
-	"github.com/leapkit/core/session"
 )
 
 func Edit(w http.ResponseWriter, r *http.Request) {
@@ -31,8 +30,6 @@ func Edit(w http.ResponseWriter, r *http.Request) {
 func Update(w http.ResponseWriter, r *http.Request) {
 	userService := r.Context().Value("userService").(models.UserService)
 	userID := uuid.FromStringOrNil(r.PathValue("id"))
-	session := session.FromCtx(r.Context())
-	companyID := session.Values["company_id"].(uuid.UUID)
 	user, err := userService.FindByID(userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -44,7 +41,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	errs := userService.Validate(user, companyID)
+	errs := userService.Validate(user)
 	if errs.HasAny() {
 		rx := render.FromCtx(r.Context())
 
@@ -63,5 +60,5 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("HX-Redirect", "/users")
+	w.Header().Set("HX-Redirect", "/")
 }

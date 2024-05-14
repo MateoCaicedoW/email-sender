@@ -15,7 +15,7 @@
                     <tr class="">
                         <td class="py-3 h-10 truncate border-b border-b-[#31363F] px-3 text-sm">
                             <div class="group flex items-center gap-3">
-                                <span hx-get="/users/<%= user.ID %>/edit" hx-target="#modal" hx-swap="outerHTML" hx-trigger="click" class="cursor-pointer border-b border-dashed border-slate-9 transition duration-300 ease-in-out group-hover:border-blue-9"><%= user.Email %></span>
+                                <span hx-get="/<%= user.ID %>/edit" hx-target="#modal" hx-swap="outerHTML" hx-trigger="click" class="cursor-pointer border-b border-dashed border-slate-9 transition duration-300 ease-in-out group-hover:border-blue-9"><%= user.Email %></span>
                             </div>
                         </td>
                         <td class="h-10 truncate border-b border-b-[#31363F] px-3 text-sm">
@@ -31,10 +31,11 @@
                                 </svg>
                             </button>
 
-                            <ul  x-show="show" style="display: none;" class="absolute z-50 flex flex-col text-[#EEEEEE]/75 border border-[#EEEEEE]/30 rounded-lg text-start p-2 bg-[#222831]">
-                                <li class="p-2 font-medium hover:bg-[#31363F] rounded-lg cursor-pointer" hx-get="/users/<%= user.ID %>/edit" hx-target="#modal" hx-swap="outerHTML" hx-trigger="click">Edit</li>
+                            <ul  x-show="show" style="display: none;" class="absolute z-50 flex flex-col text-[#EEEEEE]/75 border border-[#EEEEEE]/30 rounded-lg text-start p-2 bg-[#222831] w-full">
+                                <li class="p-2 font-medium hover:bg-[#31363F] rounded-lg cursor-pointer" hx-get="/<%= user.ID %>/edit" hx-target="#modal" hx-swap="outerHTML" hx-trigger="click">Edit</li>
+                                <li class="p-2 font-medium hover:bg-[#31363F] rounded-lg cursor-pointer" hx-post="/<%= user.ID %>/send_email" hx-target="#modal" hx-swap="outerHTML" hx-trigger="click">Send Email</li>
                                 <li class="p-2 text-red-500 font-medium hover:bg-red-500 hover:text-red-100 rounded-lg cursor-pointer"
-                                hx-delete="/users/<%= user.ID %>"
+                                hx-delete="/<%= user.ID %>"
                                 _="on htmx:confirm(issueRequest)
                                 halt the event
                                 call openConfirm(me)

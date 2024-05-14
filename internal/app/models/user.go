@@ -22,10 +22,9 @@ type Users []User
 type UserService interface {
 	FindByEmail(email string) (*User, error)
 	Create(user *User) error
-	ValidateRegister(user User) *validate.Errors
-	FirstCompany(id uuid.UUID) (Company, error)
 	FindByID(id uuid.UUID) (User, error)
-	List(limit, page int, term string, companyID uuid.UUID) (List, error)
-	Validate(user User, companyID uuid.UUID) *validate.Errors
+	List(limit, page int, term string) (List, error)
+	Validate(user User) *validate.Errors
 	Update(user User) error
+	Delete(id uuid.UUID) error
 }
