@@ -18,10 +18,12 @@ func main() {
 	)
 
 	if err := internal.AddServices(s); err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 
 	if err := internal.AddRoutes(s); err != nil {
+		fmt.Println(err, "2")
 		os.Exit(1)
 	}
 

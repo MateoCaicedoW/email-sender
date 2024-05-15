@@ -4,9 +4,7 @@ import (
 	"cmp"
 	"os"
 
-	"github.com/MateoCaicedoW/email-sender/internal/app/helpers"
-	"github.com/MateoCaicedoW/email-sender/internal/users"
-	"github.com/leapkit/core/render"
+	"github.com/MateoCaicedoW/email-sender/internal/middleware"
 	"github.com/leapkit/core/server"
 	"github.com/leapkit/core/session"
 )
@@ -21,22 +19,9 @@ func AddRoutes(r server.Router) error {
 		cmp.Or(os.Getenv("SESSION_NAME"), "leapkit_session"),
 	))
 
-	r.Use(render.Middleware(
-		render.TemplateFS(tmpls, "internal"),
+	r.Use(middleware.RequiresUser)
 
-		render.WithDefaultLayout("layout.html"),
-		render.WithHelpers(helpers.All),
-	))
-
-	r.Group("/", func(rx server.Router) {
-		rx.HandleFunc("GET /{$}", users.List)
-		rx.HandleFunc("GET /new", users.New)
-		rx.HandleFunc("POST /{$}", users.Create)
-		rx.HandleFunc("GET /{id}/edit", users.Edit)
-		rx.HandleFunc("PUT /{id}", users.Update)
-		rx.HandleFunc("DELETE /{id}", users.Delete)
-		rx.HandleFunc("POST /{id}/send_email", users.SendEmail)
-	})
+	// Routes
 
 	// Mounting the assets manager at the end of the routes
 	// so that it can serve the public assets.
