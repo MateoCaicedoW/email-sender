@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/MateoCaicedoW/email-sender/internal/app/models"
+	"github.com/MateoCaicedoW/email-sender/internal/models"
 	"github.com/gofrs/uuid/v5"
 	"github.com/leapkit/core/render"
 	"github.com/leapkit/core/session"

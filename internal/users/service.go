@@ -3,7 +3,7 @@ package users
 import (
 	"fmt"
 
-	"github.com/MateoCaicedoW/email-sender/internal/app/models"
+	"github.com/MateoCaicedoW/email-sender/internal/models"
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
 	"github.com/gofrs/uuid/v5"

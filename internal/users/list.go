@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/MateoCaicedoW/email-sender/internal/app/models"
+	"github.com/MateoCaicedoW/email-sender/internal/models"
 	"github.com/leapkit/core/render"
 )
 

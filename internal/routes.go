@@ -4,7 +4,7 @@ import (
 	"cmp"
 	"os"
 
-	"github.com/MateoCaicedoW/email-sender/internal/app/helpers"
+	"github.com/MateoCaicedoW/email-sender/internal/helpers"
 	"github.com/MateoCaicedoW/email-sender/internal/users"
 	"github.com/leapkit/core/render"
 	"github.com/leapkit/core/server"
