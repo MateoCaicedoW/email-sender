@@ -12,8 +12,6 @@ import (
 	"github.com/leapkit/core/gloves"
 
 	"github.com/paganotoni/tailo"
-
-	_ "github.com/lib/pq"
 )
 
 var (
