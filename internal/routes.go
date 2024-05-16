@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/MateoCaicedoW/email-sender/internal/helpers"
+	"github.com/MateoCaicedoW/email-sender/internal/middleware"
 	"github.com/MateoCaicedoW/email-sender/internal/users"
 	"github.com/leapkit/core/render"
 	"github.com/leapkit/core/server"
@@ -20,6 +21,8 @@ func AddRoutes(r server.Router) error {
 		cmp.Or(os.Getenv("SESSION_SECRET"), "d720c059-9664-4980-8169-1158e167ae57"),
 		cmp.Or(os.Getenv("SESSION_NAME"), "leapkit_session"),
 	))
+
+	r.Use(middleware.RequiresUser)
 
 	r.Use(render.Middleware(
 		render.TemplateFS(tmpls, "internal"),

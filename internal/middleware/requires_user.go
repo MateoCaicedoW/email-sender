@@ -21,11 +21,11 @@ func RequiresUser(next http.Handler) http.Handler {
 		}
 
 		id := userID.(uuid.UUID)
-		userService := r.Context().Value("userService").(models.UserService)
-		user, err := userService.FindByID(id)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+
+		user := models.User{
+			ID:        id,
+			FirstName: "John",
+			LastName:  "Doe",
 		}
 
 		rx := render.FromCtx(r.Context())
