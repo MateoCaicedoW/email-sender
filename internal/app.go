@@ -1,15 +1,12 @@
 package internal
 
 import (
-	"cmp"
 	"embed"
-	"os"
 	"time"
 
 	"github.com/MateoCaicedoW/email-sender/public"
 
 	"github.com/leapkit/core/assets"
-	"github.com/leapkit/core/db"
 
 	"github.com/leapkit/core/form"
 	"github.com/leapkit/core/gloves"
@@ -46,13 +43,6 @@ var (
 		gloves.WithRunner(Assets.Watch),
 		gloves.WatchExtension(".go", ".css", ".js", ".html"),
 	}
-
-	// DatabaseURL to connect and interact with our database instance.
-	DatabaseURL = cmp.Or(os.Getenv("DATABASE_URL"), "postgres://postgres:postgres@localhost:5432/email_sender?sslmode=disable")
-	// DB is the database connection builder function
-	// that will be used by the application based on the driver and
-	// connection string.
-	DB = db.ConnectionFn(DatabaseURL)
 )
 
 func init() {
