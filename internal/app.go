@@ -29,7 +29,7 @@ var (
 	GlovesOptions = []gloves.Option{
 		gloves.WithRunner(tailo.WatcherFn(TailoOptions...)),
 		gloves.WithRunner(Assets.Watch),
-		gloves.WatchExtension(".go", ".css", ".js", ".html"),
+		gloves.WatchExtension("", ".css", ".js", ""),
 	}
 )
 
@@ -38,6 +38,7 @@ func init() {
 }
 
 func DecodeTime(vals []string) (interface{}, error) {
+
 	if len(vals) == 0 {
 		return time.Time{}, nil
 	}
