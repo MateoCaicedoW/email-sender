@@ -22,14 +22,14 @@ func AddRoutes(r server.Router) error {
 		cmp.Or(os.Getenv("SESSION_NAME"), "leapkit_session"),
 	))
 
-	r.Use(middleware.RequiresUser)
-
 	r.Use(render.Middleware(
 		render.TemplateFS(tmpls, "internal"),
 
 		render.WithDefaultLayout("layout.html"),
 		render.WithHelpers(helpers.All),
 	))
+
+	r.Use(middleware.RequiresUser)
 
 	r.Group("/", func(rx server.Router) {
 		rx.HandleFunc("GET /{$}", users.List)
